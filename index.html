@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Purti Chatbot Test</title>
+    <style>
+        :root { --ink: #2b211c; --muted: #6b5d53; --bg: #fbf7f1; --card: #ffffff; --line: #e8dfd3; --accent: #8a5a2b; }
+        * { box-sizing: border-box; }
+        body { margin: 0; font: 16px/1.6 Georgia, 'Times New Roman', serif; color: var(--ink); background: var(--bg); }
+        main { max-width: 720px; margin: 0 auto; padding: 56px 16px 120px; }
+        .tag { display: inline-block; font: 600 12px/1 Arial, sans-serif; letter-spacing: .08em; text-transform: uppercase; color: var(--accent); border: 1px solid var(--accent); border-radius: 999px; padding: 6px 10px; }
+        h1 { font-size: 34px; font-weight: 400; margin: 16px 0 8px; }
+        p { margin: 0 0 16px; color: var(--muted); }
+        .card { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 20px 22px; margin-top: 24px; }
+        .card h2 { font-size: 18px; margin: 0 0 10px; }
+        ol, ul { margin: 0; padding-left: 20px; color: var(--muted); }
+        li { margin-bottom: 6px; }
+        code { font: 14px Consolas, monospace; background: #f3ece2; padding: 1px 5px; border-radius: 4px; color: var(--ink); }
+        #chat-status { font: 14px Arial, sans-serif; color: #a33; }
+    </style>
+</head>
+<body>
+    <main>
+        <span class="tag">Test environment</span>
+        <h1>Purti Assistant: chatbot test page</h1>
+        <p>This is an ordinary web page. The chatbot at the bottom right is the same one that will go on the Purti website. No login is needed. It is connected to the test (UAT) system, so nothing you do here reaches real customers.</p>
+        <p id="chat-status"></p>
+
+        <div class="card">
+            <h2>How to test</h2>
+            <ol>
+                <li>Click the chat button at the bottom right.</li>
+                <li>Chat the way a buyer would: ask about projects, prices, location, or book a site visit.</li>
+                <li>When asked for a mobile number, use a made-up one starting with <code>900000</code>, for example <code>9000001234</code>.</li>
+                <li>Use <strong>New chat</strong> (↻ in the chat header) to start again.</li>
+            </ol>
+        </div>
+
+        <div class="card">
+            <h2>When reporting a problem</h2>
+            <ul>
+                <li>What you typed, and what the chatbot replied.</li>
+                <li>The time, and a screenshot if possible.</li>
+            </ul>
+        </div>
+    </main>
+
+    <!-- Purti chatbot. To move to production, only the site URL changes. -->
+    <div id="purti-chat"></div>
+    <script>
+        (function () {
+            var site = 'https://purtirealty--purtiuat.sandbox.my.site.com/purtichat';
+            var status = document.getElementById('chat-status');
+            var script = document.createElement('script');
+            script.src = site + '/lightning/lightning.out.js';
+            script.onerror = function () { status.textContent = 'The chatbot could not be loaded. Please refresh the page.'; };
+            script.onload = function () {
+                $Lightning.use('c:purtiChatOutApp', function () {
+                    $Lightning.createComponent('c:purtiChatbot', { mode: 'floating', openOnLoad: true }, 'purti-chat');
+                }, site);
+            };
+            document.body.appendChild(script);
+        })();
+    </script>
+</body>
+</html>
